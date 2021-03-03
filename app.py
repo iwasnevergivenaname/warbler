@@ -217,8 +217,8 @@ def profile():
 		user.username = form.username.data
 		user.email = form.email.data
 		user.password = form.password.data
-		user.icon = form.icon.data
-		user.header_image = form.header_image.data
+		user.image_url = form.image_url.data
+		user.header_image_url = form.header_image_url.data
 		user.bio = form.bio.data
 		user.location = form.location.data
 		
@@ -302,7 +302,10 @@ def like_message(msg_id):
 		return redirect("/")
 	likes = g.user.likes
 	liked_message = Message.query.get_or_404(msg_id)
-	
+	"""
+[SQL: UPDATE messages SET user_id=%(user_id)s WHERE messages.id = %(messages_id)s]
+[parameters: {'user_id': None, 'messages_id': 1002}]
+"""
 	for i in likes:
 		if msg_id == i.id:
 			# liked = g.user.likes
@@ -311,15 +314,13 @@ def like_message(msg_id):
 			print("✨✨✨")
 			print(i.id)
 			print(i)
-			# db.session.remove(likes.message_id)
+			# db.session.remove({'user_id': g.user.id, 'messages_id': i.id})
 			print("✨✨✨")
 			print("✨✨✨")
 	else:
 		g.user.likes.append(liked_message)
 	db.session.commit()
 	return redirect("/")
-	
-
 
 
 ##############################################################################
@@ -364,3 +365,10 @@ def add_header(req):
 	req.headers["Expires"] = "0"
 	req.headers['Cache-Control'] = 'public, max-age=0'
 	return req
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+	"""404 NOT FOUND page."""
+	
+	return render_template('404.html'), 404
