@@ -464,6 +464,14 @@ p.card-bio {
   text-align: left;
 }
 
+.btn-primary {
+  background-color: #164599;
+}
+
+.btn-secondary {
+  background-color: #7f7f96;
+}
+
 /* ========================== Signup/Login */
 
 #user_form input.form-control {
